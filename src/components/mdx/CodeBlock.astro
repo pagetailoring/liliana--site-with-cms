@@ -8,4 +8,5 @@ interface Props {
 
 const { value = '', lang } = Astro.props;
 ---
+
 <Code code={value} lang={(lang as any) || 'plaintext'} />

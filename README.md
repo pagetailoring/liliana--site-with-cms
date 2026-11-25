@@ -29,7 +29,7 @@ pnpm dev
 
 **Figure: Homepage UI**
 
-## Features 
+## Features
 
 - Visual editing via [`@tinacms/astro`](https://www.npmjs.com/package/@tinacms/astro) — a vanilla-JS bridge, with no React in the page tree
 - Tailwind CSS v4 block builder: Hero, CTA, Features, Stats, Testimonial, Callout, Content, Split, and Video

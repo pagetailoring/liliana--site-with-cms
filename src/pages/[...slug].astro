@@ -6,11 +6,11 @@ import { getConfig, getPage, listPages } from '../lib/data';
 import { islands } from '../lib/islands';
 
 export async function getStaticPaths() {
-	const pages = await listPages();
-	return pages
-		.map((node) => node._sys.filename)
-		.filter((slug) => slug !== 'home')
-		.map((slug) => ({ params: { slug } }));
+  const pages = await listPages();
+  return pages
+    .map((node) => node._sys.filename)
+    .filter((slug) => slug !== 'home')
+    .map((slug) => ({ params: { slug } }));
 }
 
 const slug = (Astro.params.slug ?? '').toString();
@@ -21,10 +21,15 @@ const config = (await getConfig()).data?.config ?? null;
 ---
 
 <Base
-	title={data.seoTitle || config?.seo?.title || 'TinaCMS + Astro'}
-	description={config?.seo?.description ?? 'Welcome to my website!'}
+  title={data.seoTitle || config?.seo?.title || 'TinaCMS + Astro'}
+  description={config?.seo?.description ?? 'Welcome to my website!'}
 >
-	<TinaIsland name="page" wrapper={islands.page.wrapper} params={{ slug }} primary>
-		<PageBody data={data} />
-	</TinaIsland>
+  <TinaIsland
+    name="page"
+    wrapper={islands.page.wrapper}
+    params={{ slug }}
+    primary
+  >
+    <PageBody data={data} />
+  </TinaIsland>
 </Base>
