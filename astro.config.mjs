@@ -10,7 +10,11 @@ import { tinaAdminDevRedirect } from '@tinacms/astro/vite';
 export default defineConfig({
   site: process.env.SITE_URL || 'http://localhost:4321',
   output: 'static',
-  adapter: cloudflare(),
+  // Tina exposes its build-only GraphQL URL through the Node process environment.
+  // The deployed island endpoint still runs inside the Cloudflare Worker.
+  adapter: cloudflare({
+    prerenderEnvironment: process.env.TINA_LOCAL_URL ? 'node' : 'workerd',
+  }),
   integrations: [sitemap(), tina()],
   vite: {
     plugins: [tinaAdminDevRedirect()],
