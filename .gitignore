@@ -68,3 +68,7 @@ deno.lock
 .netlify
 .wrangler
 dist
+
+# Local browser test results
+test-results/
+playwright-report/

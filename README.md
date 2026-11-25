@@ -22,6 +22,15 @@ corepack pnpm verify
 
 The local build generates Tina's client, the admin UI and the Worker using local content. Run `corepack pnpm preview` to serve the built output with Wrangler.
 
+To test visual editing, install the test browser once, then run:
+
+```sh
+corepack pnpm exec playwright install chromium
+corepack pnpm test:cms
+```
+
+The test starts local servers on ports 4411, 4412, and 9411. It creates a temporary page, edits its title in the CMS, checks the draft preview and saved JSON, and removes the page.
+
 ## Cloudflare Workers Builds
 
 Set `PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`, and `SITE_URL` in the Worker's **Build variables and secrets**. Keep the token secret. The build uses the Git branch supplied by Workers Builds. TinaCloud must have indexed the branch and its committed schema.

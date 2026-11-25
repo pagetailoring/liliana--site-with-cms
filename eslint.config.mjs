@@ -12,6 +12,8 @@ export default defineConfig(
     '.pnpm-store/**',
     'dist/**',
     'public/**',
+    'test-results/**',
+    'playwright-report/**',
     'tina/__generated__/**',
   ]),
   { files: ['**/*.{js,mjs,ts}'], extends: [js.configs.recommended] },

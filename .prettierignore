@@ -10,4 +10,6 @@ public
 tina/__generated__
 tina/tina-lock.json
 pnpm-lock.yaml
-src/content
+src/content/**/*.mdx
+test-results
+playwright-report
