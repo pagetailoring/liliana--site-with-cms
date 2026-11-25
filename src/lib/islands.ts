@@ -1,57 +1,16 @@
-/**
- * Island registry — single source of truth for every editable region the
- * bridge can refresh. Each entry maps a URL slug under `/tina-island/...`
- * to a fetcher + component + wrapper. Adding a new editable region = adding
- * one entry here; the dynamic `[name].ts` route picks it up automatically.
- */
-import type { IslandRegistry } from '@tinacms/astro/experimental';
-import type { QueryResult } from '@tinacms/astro/data';
-
-import type {
-  BlogQuery,
-  ConfigQuery,
-  PageQuery,
-} from '../../tina/__generated__/types';
-import type { CmsBlog, CmsConfig, CmsPage } from './data';
+/** Shared by the prerendered page and its on-demand visual editing route. */
+import type { IslandConfig, IslandRegistry } from '@tinacms/astro/experimental';
 import PageBody from '../components/islands/PageBody.astro';
-import BlogBody from '../components/islands/BlogBody.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { getBlog, getConfig, getPage } from './data';
+import { getPage } from './data';
 
-export const islands: IslandRegistry = {
+export const islands = {
   page: {
-    fetch: (_request, params) => getPage(params.get('slug') ?? 'home'),
-    component: PageBody,
+    fetch: (_request, params) => getPage(params.get('path') ?? 'home.json'),
+    // A plain TypeScript file cannot infer the component factory from an .astro import.
+    component: PageBody as IslandConfig['component'],
     wrapper: { tag: 'main' },
-    propsFromData: (data) => ({
-      data: (data as QueryResult<PageQuery>).data?.page as CmsPage | undefined,
+    propsFromData: (result) => ({
+      data: (result as Awaited<ReturnType<typeof getPage>>).data.page,
     }),
   },
-  blog: {
-    fetch: (_request, params) => getBlog(params.get('slug') ?? ''),
-    component: BlogBody,
-    wrapper: { tag: 'article' },
-    propsFromData: (data) => ({
-      data: (data as QueryResult<BlogQuery>).data?.blog as CmsBlog | undefined,
-    }),
-  },
-  global: {
-    fetch: () => getConfig(),
-    component: Header,
-    wrapper: { tag: 'div' },
-    propsFromData: (data) => ({
-      config: (data as QueryResult<ConfigQuery>).data?.config as
-        CmsConfig | undefined,
-    }),
-  },
-  'global-footer': {
-    fetch: () => getConfig(),
-    component: Footer,
-    wrapper: { tag: 'div' },
-    propsFromData: (data) => ({
-      config: (data as QueryResult<ConfigQuery>).data?.config as
-        CmsConfig | undefined,
-    }),
-  },
-};
+} satisfies IslandRegistry;

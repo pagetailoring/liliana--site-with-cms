@@ -1,12 +1,13 @@
 ---
-import Blocks from '../blocks/Blocks.astro';
+import { tinaField } from '@tinacms/astro/tina-field';
 import type { CmsPage } from '../../lib/data';
-
 interface Props {
-  data?: CmsPage | null;
+  data: CmsPage;
 }
-
 const { data } = Astro.props;
 ---
 
-{data && <Blocks data={data} />}
+<h1 data-tina-field={tinaField(data, 'title')}>{data.title}</h1>
+<div class="page-body" data-tina-field={tinaField(data, 'body')}>
+  {data.body}
+</div>

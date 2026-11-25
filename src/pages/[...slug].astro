@@ -1,35 +1,57 @@
 ---
-import Base from '../layouts/Base.astro';
+import type { GetStaticPaths } from 'astro';
 import TinaIsland from '@tinacms/astro/TinaIsland.astro';
 import PageBody from '../components/islands/PageBody.astro';
-import { getConfig, getPage, listPages } from '../lib/data';
+import { getConfig, getPage } from '../lib/data';
 import { islands } from '../lib/islands';
+import '../styles/global.css';
 
-export async function getStaticPaths() {
-  const pages = await listPages();
-  return pages
-    .map((node) => node._sys.filename)
-    .filter((slug) => slug !== 'home')
-    .map((slug) => ({ params: { slug } }));
-}
+// Use the repository for the route list. Tina resolves each document's content
+// both at build time and when the editor refreshes its preview.
+export const getStaticPaths = (() => {
+  const documents = import.meta.glob('/src/content/page/**/*.json');
+  return Object.keys(documents).map((file) => {
+    const relativePath = file.slice('/src/content/page/'.length);
+    const slug = relativePath.slice(0, -'.json'.length);
+    return {
+      params: { slug: slug === 'home' ? undefined : slug },
+      props: { relativePath },
+    };
+  });
+}) satisfies GetStaticPaths;
 
-const slug = (Astro.params.slug ?? '').toString();
-const page = await getPage(slug);
-const data = page.data?.page;
-if (!data) return new Response('Not Found', { status: 404 });
-const config = (await getConfig()).data?.config ?? null;
+const { relativePath } = Astro.props;
+const [page, settings] = await Promise.all([
+  getPage(relativePath),
+  getConfig(),
+]);
+const data = page.data.page;
+if (!data) throw new Error(`Could not load the page at ${relativePath}`);
+const title = `${data.title} | ${settings.data.config.title}`;
+const description = data.description || settings.data.config.description;
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
-<Base
-  title={data.seoTitle || config?.seo?.title || 'TinaCMS + Astro'}
-  description={config?.seo?.description ?? 'Welcome to my website!'}
->
-  <TinaIsland
-    name="page"
-    wrapper={islands.page.wrapper}
-    params={{ slug }}
-    primary
-  >
-    <PageBody data={data} />
-  </TinaIsland>
-</Base>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <TinaIsland
+      name="page"
+      wrapper={islands.page.wrapper}
+      params={{ path: relativePath }}
+      primary
+    >
+      <PageBody data={data} />
+    </TinaIsland>
+  </body>
+</html>
