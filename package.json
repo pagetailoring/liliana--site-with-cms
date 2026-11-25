@@ -1,7 +1,12 @@
 {
-  "name": "astro-starter",
+  "name": "liliana-gd",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.2.1",
+  "author": "pagetailoring",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pagetailoring/liliana--site-with-cms"
+  },
   "engines": {
     "node": ">=22.22.0"
   },
