@@ -9,3 +9,5 @@ Before working in this repository, read and follow `.agents/AGENTS.md`.
 ## Always-On Rules
 
 Correct obvious typos in prompts. If the intent is unclear, STOP and ask for clarification.
+
+Create commits locally. Only the user pushes to remotes.
