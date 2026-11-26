@@ -8,6 +8,6 @@ const { data } = Astro.props;
 ---
 
 <h1 data-tina-field={tinaField(data, 'title')}>{data.title}</h1>
-<div class="page-body" data-tina-field={tinaField(data, 'body')}>
+<div data-tina-field={tinaField(data, 'body')}>
   {data.body}
 </div>
