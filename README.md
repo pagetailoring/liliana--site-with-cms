@@ -33,6 +33,6 @@ The test starts local servers on ports 4411, 4412, and 9411. It creates a tempor
 
 ## Cloudflare Workers Builds
 
-Set `PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`, and `SITE_URL` in the Worker's **Build variables and secrets**. Keep the token secret. The build uses the Git branch supplied by Workers Builds. TinaCloud must have indexed the branch and its committed schema.
+Set `PUBLIC_TINA_CLIENT_ID` and `TINA_TOKEN` in the Worker's **Build variables and secrets**. Keep the token secret. Canonical URLs and sitemaps default to `https://liliana.gd`. Set `SITE_URL` only to override that address. The build uses the Git branch supplied by Workers Builds. TinaCloud must have indexed the branch and its committed schema.
 
 Use `pnpm run build` for the build command and `pnpm run deploy` for the deploy command. The production build reads local documents while generating a client connected to TinaCloud for the editor.

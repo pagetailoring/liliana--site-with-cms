@@ -8,7 +8,7 @@ import { tinaAdminDevRedirect } from '@tinacms/astro/vite';
 // Pages prerender to HTML. The Worker renders /tina-island/* on demand
 // so the editor can display draft content without publishing it.
 export default defineConfig({
-  site: process.env.SITE_URL || 'http://localhost:4321',
+  site: process.env.SITE_URL || 'https://liliana.gd',
   output: 'static',
   // Tina exposes its build-only GraphQL URL through the Node process environment.
   // The deployed island endpoint still runs inside the Cloudflare Worker.
